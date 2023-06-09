@@ -1,0 +1,45 @@
+<div class="container" role="main">
+  <div class="Card">
+    <div class="card-body">
+      <h1>Consulta de Claims de Returns</h1>
+      <form class="form-inline" (submit)="onSubmit()">
+        <div class="form-group  mb-2">
+          <label for="numero">Número de seguimiento:</label>
+          <input class="form-control" type="text" id="numero" [(ngModel)]="numero"
+            [ngModelOptions]="{standalone: true}">
+        </div>
+        <button class="btn btn-primary" type="submit">Obtener imagen</button>
+      </form>
+      <form class="form-inline" (submit)="onSubmitSO()">
+        <div class="form-group  mb-2">
+          <label for="numero">Número de seguimiento:</label>
+          <input class="form-control" type="text" id="numeroSO" [(ngModel)]="numeroSO"
+            [ngModelOptions]="{standalone: true}">
+        </div>
+        <button class="btn btn-primary" type="submit">Obtener por SO</button>
+      </form>
+      <li class="list-group list-group-flush">
+        <ul class="list-group-item" *ngFor="let imagen of respuesta">
+          <div class="card text-center" style="width: 18rem;">
+            <div class="card-body">
+              <img [src]="imagen.photography" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h4 class="card-title">{{ imagen.img }} - {{ imagen.tracking_id }}</h4>
+                <h5 class="card-title">{{ imagen.container_id }} </h5>
+                <span *ngIf="imagen.source==1" class="badge text-bg-primary">Reciving</span> <span *ngIf="imagen.source==2" class="badge text-bg-secondary">Inspection</span>
+                <p class="card-text">{{imagen.comments}}</p>
+              </div>
+            </div>
+          </div>
+        </ul>
+      </li>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+
+  </footer>
+</div>
+
+<router-outlet></router-outlet>
