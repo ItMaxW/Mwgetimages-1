@@ -42,13 +42,15 @@ export class AppComponent {
 
 
   
+
   
-   onSubmitSO() {
+
+   async onSubmitSO() {
     this.apiService.CompleteSO(this.numeroSO).subscribe(
       (data: any) => {
         this.respuesta = data;
         console.log(data);
-        this.respuesta.forEach((item: { id_trkgimg: string; id_tracking: string; photography: string; source: number, img:string}) => {
+        this.respuesta.forEach(async (item: { id_trkgimg: string; id_tracking: string; photography: string; source: number, img:string}) => {
           if(item.source == 1) {
             this.apiService.CompleteItem(item.img).subscribe((data2: any) => {
               setTimeout(() => {
@@ -58,14 +60,34 @@ export class AppComponent {
               }, 5000); 
             });
           } else {
-            this.apiService.GetInspection(item.img).subscribe((data3: any) => {
+            const url = `https://43b3nq0ov9.execute-api.us-west-2.amazonaws.com/Prod/getdetails/${item.img}`;
+            const timeoutValue = 90000;
+          
+            try {
+              const response = await fetch(url, {  });
+              if (response.ok) {
+                const data3 = await response.json();
+                item.id_trkgimg = data3[0].id_trkgimg;
+                item.id_tracking = data3[0].id_tracking;
+                item.photography = data3[0].image;
+                console.log('GetInspection response:', data);
+                return data;
+              } else {
+                console.log('GetInspection error:', response.status);
+                throw new Error(`GetInspection request failed with status ${response.status}`);
+              }
+            } catch (error) {
+              console.log('GetInspection error:', error);
+              throw error;
+            }
+           /*  this.apiService.GetInspection(item.img).subscribe((data3: any) => {
               setTimeout(() => {
                 console.log(data3);
                 item.id_trkgimg = data3[0].id_trkgimg;
                 item.id_tracking = data3[0].id_tracking;
                 item.photography = data3[0].image;
               }, 5000);
-            });
+            }); */
           }
         });
       },
