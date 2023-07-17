@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ApiService } from './api.service';
 import { defer, from, concatMap, concatAll, catchError } from 'rxjs';
 import { of } from 'rxjs';
-
+import {      retryWhen, delay, takeWhile } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -39,8 +39,11 @@ export class AppComponent {
       }
     );
   }
+
+
   
-  onSubmitSO() {
+  
+   onSubmitSO() {
     this.apiService.CompleteSO(this.numeroSO).subscribe(
       (data: any) => {
         this.respuesta = data;
@@ -70,5 +73,5 @@ export class AppComponent {
         console.log(error);
       }
     );
-  } 
+  }  
 }
